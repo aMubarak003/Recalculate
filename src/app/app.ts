@@ -105,7 +105,7 @@ export class App {
       oscillator.connect(gainNode);
       gainNode.connect(this.audioContext.destination);
       
-      oscillator.frequency.value = 800; // Warning tone frequency
+      oscillator.frequency.value = 500; // Warning tone frequency
       oscillator.type = 'square';
       gainNode.gain.value = 0.3;
       
