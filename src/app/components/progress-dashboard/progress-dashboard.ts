@@ -73,4 +73,30 @@ items: ProcessingItem[] = [];
   trackByItem(index: number, item: ProcessingItem): string {
     return `${item.id}-${item.status}-${item.retryCount}`;
   }
+
+  downloadFailedItems(): void {
+    const maxRetries = 5;
+    const exhaustedItems = this.items.filter(
+      item => item.status === 'failed' && item.retryCount >= maxRetries
+    );
+
+    if (exhaustedItems.length === 0) {
+      alert('No items have exhausted all 5 retries yet.');
+      return;
+    }
+
+    const lines = exhaustedItems.map(item => 
+      `Index: ${item.id + 1}, ScorecardNodeId: ${item.data.ScorecardNodeId}, CalendarPeriodId: ${item.data.CalendarPeriodId}, Retries: ${item.retryCount}, Error: ${item.error || 'Unknown'}`
+    );
+
+    const content = `Failed Items Report (Exhausted ${maxRetries} retries)\nGenerated: ${new Date().toISOString()}\n\nTotal Failed: ${exhaustedItems.length}\n\n${lines.join('\n')}`;
+
+    const blob = new Blob([content], { type: 'text/plain' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `failed-items-${new Date().toISOString().split('T')[0]}.txt`;
+    a.click();
+    URL.revokeObjectURL(url);
+  }
 }

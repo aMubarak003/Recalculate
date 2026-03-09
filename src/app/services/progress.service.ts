@@ -76,6 +76,31 @@ export class ProgressService {
     this.updateSummary();
   }
 
+  getRetryableItems(maxRetries: number): ProcessingItem[] {
+    return this.itemsSubject.getValue().filter(
+      item => item.status === 'failed' && item.retryCount < maxRetries
+    );
+  }
+
+  resetRetryableItems(maxRetries: number): void {
+    const items = this.itemsSubject.getValue();
+    const updatedItems = items.map(item => {
+      if (item.status === 'failed' && item.retryCount < maxRetries) {
+        return { ...item, status: 'pending' as const };
+      }
+      return item;
+    });
+    
+    this.itemsSubject.next(updatedItems);
+    this.updateSummary();
+  }
+
+  getExhaustedFailedItems(maxRetries: number): ProcessingItem[] {
+    return this.itemsSubject.getValue().filter(
+      item => item.status === 'failed' && item.retryCount >= maxRetries
+    );
+  }
+
   getFailedItems(): ProcessingItem[] {
     return this.itemsSubject.getValue().filter(item => item.status === 'failed');
   }

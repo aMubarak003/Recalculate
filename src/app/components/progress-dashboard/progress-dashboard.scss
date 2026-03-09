@@ -53,6 +53,20 @@
       &.processing { background: #e8f5e9; color: #2e7d32; }
       &.success { background: #c8e6c9; color: #1b5e20; }
       &.failed { background: #ffcdd2; color: #b71c1c; }
+
+      &.clickable {
+        cursor: pointer;
+        transition: transform 0.2s, box-shadow 0.2s;
+
+        &:hover {
+          transform: translateY(-2px);
+          box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        }
+
+        &:active {
+          transform: translateY(0);
+        }
+      }
     }
   }
 

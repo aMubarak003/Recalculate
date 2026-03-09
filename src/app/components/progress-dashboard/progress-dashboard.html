@@ -24,9 +24,9 @@
       <span class="value">{{ summary.success }}</span>
       <span class="label">Success</span>
     </div>
-    <div class="card failed">
+    <div class="card failed clickable" (click)="downloadFailedItems()" title="Click to download failed items report">
       <span class="value">{{ summary.failed }}</span>
-      <span class="label">Failed</span>
+      <span class="label">Failed ⬇️</span>
     </div>
   </div>
 

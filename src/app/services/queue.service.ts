@@ -17,6 +17,7 @@ export class QueueService {
   private isPaused = false;
   private pendingItems: ProcessingItem[] = [];
   private currentIndex = 0;
+  private readonly MAX_RETRIES = 5;
 
   status$: Observable<QueueStatus> = this.statusSubject.asObservable();
 
@@ -50,12 +51,16 @@ export class QueueService {
 
     await this.processItems(pendingItems);
     
-    // After initial processing, check for failed items and retry
-    const failedItems = this.progressService.getFailedItems();
-    
-    if (failedItems.length > 0 && !this.isPaused && this.statusSubject.getValue() === 'running') {
+    // After initial processing, retry failed items up to MAX_RETRIES times
+    for (let retry = 1; retry <= this.MAX_RETRIES; retry++) {
+      const failedItems = this.progressService.getRetryableItems(this.MAX_RETRIES);
+      
+      if (failedItems.length === 0 || this.isPaused || this.statusSubject.getValue() !== 'running') {
+        break;
+      }
+      
       this.statusSubject.next('retrying');
-      this.progressService.resetFailedItems();
+      this.progressService.resetRetryableItems(this.MAX_RETRIES);
       const itemsToRetry = this.progressService.getPendingItems();
       await this.processItems(itemsToRetry);
     }
