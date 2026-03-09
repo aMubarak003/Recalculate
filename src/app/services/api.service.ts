@@ -21,7 +21,7 @@ export class ApiService {
   }
 
   updateMetricSnapshot(metricData: MetricData): Observable<any> {
-    const url = `${this.domainUrl}/Metric/update/EditmetricSnapshotvaluesForRecalc?nodeId=${metricData.ScorecardNodeId}&CalId=${metricData.CalendarPeriodId}`;
+    const url = `${this.domainUrl}/api/Metric/update/EditmetricSnapshotvaluesForRecalc?nodeId=${metricData.ScorecardNodeId}&CalId=${metricData.CalendarPeriodId}`;
     
     const headers = new HttpHeaders({
       'Content-Type': 'application/json'
