@@ -57,3 +57,49 @@ Angular CLI does not come with an end-to-end testing framework by default. You c
 ## Additional Resources
 
 For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+
+```
+├── 📁 app
+│   ├── 📁 components
+│   │   ├── 📁 config-form
+│   │   │   ├── 🌐 config-form.html
+│   │   │   ├── 🎨 config-form.scss
+│   │   │   ├── 📄 config-form.spec.ts
+│   │   │   └── 📄 config-form.ts
+│   │   ├── 📁 controls
+│   │   │   ├── 🌐 controls.html
+│   │   │   ├── 🎨 controls.scss
+│   │   │   ├── 📄 controls.spec.ts
+│   │   │   └── 📄 controls.ts
+│   │   ├── 📁 file-upload
+│   │   │   ├── 🌐 file-upload.html
+│   │   │   ├── 🎨 file-upload.scss
+│   │   │   ├── 📄 file-upload.spec.ts
+│   │   │   └── 📄 file-upload.ts
+│   │   └── 📁 progress-dashboard
+│   │       ├── 🌐 progress-dashboard.html
+│   │       ├── 🎨 progress-dashboard.scss
+│   │       ├── 📄 progress-dashboard.spec.ts
+│   │       └── 📄 progress-dashboard.ts
+│   ├── 📁 models
+│   │   └── 📄 metric-data.model.ts
+│   ├── 📁 services
+│   │   ├── 📄 api.service.spec.ts
+│   │   ├── 📄 api.service.ts
+│   │   ├── 📄 email.service.spec.ts
+│   │   ├── 📄 email.service.ts
+│   │   ├── 📄 file-reader.service.spec.ts
+│   │   ├── 📄 file-reader.service.ts
+│   │   ├── 📄 progress.service.spec.ts
+│   │   ├── 📄 progress.service.ts
+│   │   ├── 📄 queue.service.spec.ts
+│   │   └── 📄 queue.service.ts
+│   ├── 📄 app.config.ts
+│   ├── 🌐 app.html
+│   ├── 🎨 app.scss
+│   ├── 📄 app.spec.ts
+│   └── 📄 app.ts
+├── 🌐 index.html
+├── 📄 main.ts
+└── 🎨 styles.scss
+```
