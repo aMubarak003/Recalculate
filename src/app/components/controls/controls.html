@@ -1,1 +1,71 @@
-<p>controls works!</p>
+<div class="controls-container">
+  <h3>🎮 Controls</h3>
+
+  <div class="concurrency-control">
+    <label for="concurrency">Concurrent Requests:</label>
+    <input 
+      type="number" 
+      id="concurrency" 
+      [ngModel]="concurrency"
+      (ngModelChange)="onConcurrencyChange($event)"
+      min="1" 
+      max="20"
+      [disabled]="status === 'running' || status === 'retrying'"
+    />
+    <span class="hint">(10-15 recommended)</span>
+  </div>
+
+  <div class="button-group">
+    <button 
+      class="btn btn-start" 
+      (click)="start.emit()"
+      [disabled]="!canStart"
+    >
+      ▶️ Start
+    </button>
+
+    <button 
+      class="btn btn-pause" 
+      (click)="pause.emit()"
+      [disabled]="!canPause"
+    >
+      ⏸️ Pause
+    </button>
+
+    <button 
+      class="btn btn-resume" 
+      (click)="resume.emit()"
+      [disabled]="!canResume"
+    >
+      ⏯️ Resume
+    </button>
+
+    <button 
+      class="btn btn-stop" 
+      (click)="stop.emit()"
+      [disabled]="!canStop"
+    >
+      ⏹️ Stop
+    </button>
+
+    <button 
+      class="btn btn-reset" 
+      (click)="reset.emit()"
+      [disabled]="!canReset"
+    >
+      🔄 Reset
+    </button>
+  </div>
+
+  <div class="status-messages">
+    <p *ngIf="!isConfigured" class="warning">
+      ⚠️ Please configure the domain URL and email addresses first.
+    </p>
+    <p *ngIf="isConfigured && !hasData" class="warning">
+      ⚠️ Please upload data files to process.
+    </p>
+    <p *ngIf="isConfigured && hasData && status === 'idle'" class="info">
+      ✅ Ready to start processing.
+    </p>
+  </div>
+</div>
