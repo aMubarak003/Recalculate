@@ -1,0 +1,153 @@
+.progress-dashboard {
+  background: #f8f9fa;
+  border-radius: 8px;
+  padding: 20px;
+  margin-bottom: 20px;
+
+  h3 {
+    margin-top: 0;
+    color: #333;
+  }
+
+  .status-badge {
+    display: inline-block;
+    padding: 6px 12px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 600;
+    margin-bottom: 15px;
+
+    &.status-idle { background: #e0e0e0; color: #666; }
+    &.status-running { background: #fff3cd; color: #856404; }
+    &.status-paused { background: #cce5ff; color: #004085; }
+    &.status-completed { background: #d4edda; color: #155724; }
+    &.status-retrying { background: #f8d7da; color: #721c24; }
+  }
+
+  .summary-cards {
+    display: flex;
+    gap: 15px;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+
+    .card {
+      flex: 1;
+      min-width: 100px;
+      padding: 15px;
+      border-radius: 8px;
+      text-align: center;
+
+      .value {
+        display: block;
+        font-size: 28px;
+        font-weight: bold;
+      }
+
+      .label {
+        font-size: 12px;
+        text-transform: uppercase;
+      }
+
+      &.total { background: #e3f2fd; color: #1565c0; }
+      &.pending { background: #fff8e1; color: #f57f17; }
+      &.processing { background: #e8f5e9; color: #2e7d32; }
+      &.success { background: #c8e6c9; color: #1b5e20; }
+      &.failed { background: #ffcdd2; color: #b71c1c; }
+    }
+  }
+
+  .progress-bar-container {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    margin-bottom: 20px;
+
+    .progress-bar {
+      flex: 1;
+      height: 20px;
+      background: #e0e0e0;
+      border-radius: 10px;
+      overflow: hidden;
+      position: relative;
+
+      .progress-fill {
+        height: 100%;
+        position: absolute;
+        top: 0;
+        transition: width 0.3s ease;
+
+        &.success-fill {
+          background: linear-gradient(90deg, #4caf50, #8bc34a);
+          left: 0;
+        }
+
+        &.failed-fill {
+          background: linear-gradient(90deg, #f44336, #ff5722);
+        }
+      }
+    }
+
+    .progress-text {
+      font-weight: bold;
+      color: #333;
+      min-width: 60px;
+    }
+  }
+
+  .items-table-container {
+    max-height: 400px;
+    overflow-y: auto;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+
+    .items-table {
+      width: 100%;
+      border-collapse: collapse;
+
+      th, td {
+        padding: 10px 12px;
+        text-align: left;
+        border-bottom: 1px solid #e0e0e0;
+      }
+
+      th {
+        background: #f5f5f5;
+        font-weight: 600;
+        position: sticky;
+        top: 0;
+      }
+
+      tr {
+        &.status-pending { background: #fff; }
+        &.status-processing { background: #fffde7; }
+        &.status-success { background: #e8f5e9; }
+        &.status-failed { background: #ffebee; }
+      }
+
+      .status-cell {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+
+        .status-icon {
+          font-size: 14px;
+        }
+      }
+
+      .error-cell {
+        max-width: 200px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        font-size: 12px;
+        color: #c62828;
+      }
+    }
+  }
+
+  .empty-state {
+    text-align: center;
+    padding: 40px;
+    color: #888;
+  }
+}

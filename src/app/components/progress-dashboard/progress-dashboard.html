@@ -1,1 +1,84 @@
-<p>progress-dashboard works!</p>
+<div class="progress-dashboard">
+  <h3>📊 Processing Progress</h3>
+
+  <!-- Status Badge -->
+  <div class="status-badge" [class]="'status-' + status">
+    {{ status | uppercase }}
+  </div>
+
+  <!-- Summary Cards -->
+  <div class="summary-cards">
+    <div class="card total">
+      <span class="value">{{ summary.total }}</span>
+      <span class="label">Total</span>
+    </div>
+    <div class="card pending">
+      <span class="value">{{ summary.pending }}</span>
+      <span class="label">Pending</span>
+    </div>
+    <div class="card processing">
+      <span class="value">{{ summary.processing }}</span>
+      <span class="label">Processing</span>
+    </div>
+    <div class="card success">
+      <span class="value">{{ summary.success }}</span>
+      <span class="label">Success</span>
+    </div>
+    <div class="card failed">
+      <span class="value">{{ summary.failed }}</span>
+      <span class="label">Failed</span>
+    </div>
+  </div>
+
+  <!-- Progress Bar -->
+  <div class="progress-bar-container" *ngIf="summary.total > 0">
+    <div class="progress-bar">
+      <div 
+        class="progress-fill success-fill" 
+        [style.width.%]="(summary.success / summary.total) * 100"
+      ></div>
+      <div 
+        class="progress-fill failed-fill" 
+        [style.width.%]="(summary.failed / summary.total) * 100"
+        [style.left.%]="(summary.success / summary.total) * 100"
+      ></div>
+    </div>
+    <span class="progress-text">{{ progressPercentage | number:'1.1-1' }}%</span>
+  </div>
+
+  <!-- Items Table -->
+  <div class="items-table-container" *ngIf="items.length > 0">
+    <table class="items-table">
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>ScorecardNodeId</th>
+          <th>CalendarPeriodId</th>
+          <th>Status</th>
+          <th>Retries</th>
+          <th>Error</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr 
+          *ngFor="let item of items; trackBy: trackByItem" 
+          [class]="getStatusClass(item.status)"
+        >
+          <td>{{ item.id + 1 }}</td>
+          <td>{{ item.data.ScorecardNodeId }}</td>
+          <td>{{ item.data.CalendarPeriodId }}</td>
+          <td class="status-cell">
+            <span class="status-icon">{{ getStatusIcon(item.status) }}</span>
+            {{ item.status }}
+          </td>
+          <td>{{ item.retryCount }}</td>
+          <td class="error-cell">{{ item.error || '-' }}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="empty-state" *ngIf="items.length === 0">
+    <p>No data loaded. Please upload files and start processing.</p>
+  </div>
+</div>
