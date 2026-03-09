@@ -26,19 +26,6 @@
         (reset)="onReset()"
         (concurrencyChange)="onConcurrencyChange($event)"
       ></app-controls>
-
-      <!-- Email Status -->
-      <div class="email-status" *ngIf="isProcessingComplete">
-        <div class="email-success" *ngIf="emailSent">
-          ✅ Completion email sent to {{ config?.emailAddresses?.join(', ') }}
-        </div>
-        <div class="email-error" *ngIf="emailError">
-          ❌ Failed to send email: {{ emailError }}
-        </div>
-        <div class="email-pending" *ngIf="!emailSent && !emailError">
-          📧 Sending completion email...
-        </div>
-      </div>
     </div>
 
     <div class="right-panel">

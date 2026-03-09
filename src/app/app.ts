@@ -2,7 +2,6 @@ import { CommonModule } from '@angular/common';
 import { Component, signal, ViewChild } from '@angular/core';
 import { AppConfig, MetricData } from './models/metric-data.model';
 import { ApiService } from './services/api.service';
-import { EmailService } from './services/email.service';
 import { FileReaderService } from './services/file-reader.service';
 import { ProgressService } from './services/progress.service';
 import { QueueStatus, QueueService } from './services/queue.service';
@@ -31,23 +30,21 @@ export class App {
   status: QueueStatus = 'idle';
   concurrency = 12;
   isProcessingComplete = false;
-  emailSent = false;
-  emailError: string | null = null;
+  private audioContext: AudioContext | null = null;
 
   constructor(
     private fileReaderService: FileReaderService,
     private apiService: ApiService,
     private queueService: QueueService,
-    private progressService: ProgressService,
-    private emailService: EmailService
+    private progressService: ProgressService
   ) {
     this.queueService.status$.subscribe(status => {
       this.status = status;
       
-      // When processing completes, send email
+      // When processing completes, play warning sound
       if (status === 'completed' && !this.isProcessingComplete && this.config) {
         this.isProcessingComplete = true;
-        this.sendCompletionEmail();
+        this.playWarningSound();
       }
     });
   }
@@ -62,8 +59,6 @@ export class App {
       this.metricData = await this.fileReaderService.readFiles(files);
       this.progressService.initializeItems(this.metricData);
       this.isProcessingComplete = false;
-      this.emailSent = false;
-      this.emailError = null;
     } catch (error: any) {
       console.error('Error reading files:', error);
       alert(`Error reading files: ${error.message}`);
@@ -72,8 +67,6 @@ export class App {
 
   onStart(): void {
     this.isProcessingComplete = false;
-    this.emailSent = false;
-    this.emailError = null;
     this.queueService.startProcessing();
   }
 
@@ -93,8 +86,6 @@ export class App {
     this.queueService.reset();
     this.metricData = [];
     this.isProcessingComplete = false;
-    this.emailSent = false;
-    this.emailError = null;
     if (this.fileUploadComponent) {
       this.fileUploadComponent.clearFiles();
     }
@@ -105,19 +96,32 @@ export class App {
     this.queueService.setConcurrency(value);
   }
 
-  private sendCompletionEmail(): void {
-    if (!this.config) return;
-
-    this.emailService.sendCompletionEmail(this.config.emailAddresses).subscribe({
-      next: () => {
-        this.emailSent = true;
-        console.log('Completion email sent successfully');
-      },
-      error: (error) => {
-        this.emailError = error.message || 'Failed to send email';
-        console.error('Failed to send completion email:', error);
-      }
-    });
+  private playWarningSound(): void {
+    try {
+      this.audioContext = new AudioContext();
+      const oscillator = this.audioContext.createOscillator();
+      const gainNode = this.audioContext.createGain();
+      
+      oscillator.connect(gainNode);
+      gainNode.connect(this.audioContext.destination);
+      
+      oscillator.frequency.value = 800; // Warning tone frequency
+      oscillator.type = 'square';
+      gainNode.gain.value = 0.3;
+      
+      oscillator.start();
+      
+      // Stop after 3 seconds
+      setTimeout(() => {
+        oscillator.stop();
+        if (this.audioContext) {
+          this.audioContext.close();
+          this.audioContext = null;
+        }
+      }, 3000);
+    } catch (error) {
+      console.error('Failed to play warning sound:', error);
+    }
   }
 
   get isConfigured(): boolean {

@@ -16,34 +16,6 @@
       </span>
     </div>
 
-    <div class="form-group">
-      <label for="email1">Email Address 1 *</label>
-      <input 
-        type="email" 
-        id="email1" 
-        formControlName="email1"
-        placeholder="email1@example.com"
-        [class.invalid]="email1?.invalid && email1?.touched"
-      />
-      <span class="error" *ngIf="email1?.invalid && email1?.touched">
-        Please enter a valid email address
-      </span>
-    </div>
-
-    <div class="form-group">
-      <label for="email2">Email Address 2 *</label>
-      <input 
-        type="email" 
-        id="email2" 
-        formControlName="email2"
-        placeholder="email2@example.com"
-        [class.invalid]="email2?.invalid && email2?.touched"
-      />
-      <span class="error" *ngIf="email2?.invalid && email2?.touched">
-        Please enter a valid email address
-      </span>
-    </div>
-
     <button type="submit" [disabled]="configForm.invalid" class="btn-primary">
       Save Configuration
     </button>

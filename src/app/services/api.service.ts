@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { EmailPayload, MetricData } from '../models/metric-data.model';
+import { MetricData } from '../models/metric-data.model';
 import { Observable, retry } from 'rxjs';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 
@@ -30,15 +30,4 @@ export class ApiService {
     return this.http.put(url, [metricData], { headers });
   }
 
-  sendEmail(payload: EmailPayload): Observable<any> {
-    const url = `${this.domainUrl}/api/email/send`;
-    
-    const headers = new HttpHeaders({
-      'Content-Type': 'application/json'
-    });
-
-    return this.http.post(url, payload, { headers }).pipe(
-      retry(2)
-    );
-  }
 }

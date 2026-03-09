@@ -20,13 +20,6 @@ export interface ProcessingSummary {
   processing: number;
 }
 
-export interface EmailPayload {
-  to: string[];
-  subject: string;
-  body: string;
-}
-
 export interface AppConfig {
   domainUrl: string;
-  emailAddresses: string[];
 }
