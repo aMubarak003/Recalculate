@@ -1,1 +1,41 @@
-<p>file-upload works!</p>
+<div class="file-upload-container">
+  <h3>📁 Upload Data Files</h3>
+  
+  <div 
+    class="drop-zone"
+    [class.dragging]="isDragging"
+    (dragover)="onDragOver($event)"
+    (dragleave)="onDragLeave($event)"
+    (drop)="onDrop($event)"
+    (click)="fileInput.click()"
+  >
+    <input 
+      #fileInput
+      type="file" 
+      multiple 
+      accept=".json,.txt"
+      (change)="onFileSelect($event)"
+      hidden
+    />
+    
+    <div class="drop-zone-content">
+      <span class="icon">📤</span>
+      <p>Drag & drop JSON/Text files here</p>
+      <p class="subtitle">or click to browse</p>
+    </div>
+  </div>
+
+  <div class="file-list" *ngIf="selectedFiles.length > 0">
+    <h4>Selected Files ({{ selectedFiles.length }})</h4>
+    <ul>
+      <li *ngFor="let file of selectedFiles; let i = index">
+        <span class="file-info">
+          <span class="file-name">{{ file.name }}</span>
+          <span class="file-size">{{ formatFileSize(file.size) }}</span>
+        </span>
+        <button class="btn-remove" (click)="removeFile(i)">✕</button>
+      </li>
+    </ul>
+    <button class="btn-clear" (click)="clearFiles()">Clear All</button>
+  </div>
+</div>
