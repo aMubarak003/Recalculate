@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { EmailPayload, MetricData } from '../models/metric-data.model';
-import { Observable, retry, timeout } from 'rxjs';
+import { Observable, retry } from 'rxjs';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 
 @Injectable({
@@ -27,9 +27,7 @@ export class ApiService {
       'Content-Type': 'application/json'
     });
 
-    return this.http.put(url, [metricData], { headers }).pipe(
-      timeout(30000) // 30 second timeout
-    );
+    return this.http.put(url, [metricData], { headers });
   }
 
   sendEmail(payload: EmailPayload): Observable<any> {
@@ -40,7 +38,6 @@ export class ApiService {
     });
 
     return this.http.post(url, payload, { headers }).pipe(
-      timeout(30000),
       retry(2)
     );
   }

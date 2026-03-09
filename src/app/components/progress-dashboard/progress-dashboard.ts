@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
+import { ChangeDetectorRef, Component } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { ProcessingItem, ProcessingSummary } from '../../models/metric-data.model';
 import { ProgressService } from '../../services/progress.service';
@@ -26,19 +26,23 @@ items: ProcessingItem[] = [];
 
   constructor(
     private progressService: ProgressService,
-    private queueService: QueueService
+    private queueService: QueueService,
+    private cdr: ChangeDetectorRef
   ) {}
 
   ngOnInit(): void {
     this.subscriptions.push(
       this.progressService.items$.subscribe(items => {
-        this.items = items;
+        this.items = [...items];
+        this.cdr.detectChanges();
       }),
       this.progressService.summary$.subscribe(summary => {
-        this.summary = summary;
+        this.summary = { ...summary };
+        this.cdr.detectChanges();
       }),
       this.queueService.status$.subscribe(status => {
         this.status = status;
+        this.cdr.detectChanges();
       })
     );
   }
@@ -66,7 +70,7 @@ items: ProcessingItem[] = [];
     }
   }
 
-  trackByItem(index: number, item: ProcessingItem): number {
-    return item.id;
+  trackByItem(index: number, item: ProcessingItem): string {
+    return `${item.id}-${item.status}-${item.retryCount}`;
   }
 }
