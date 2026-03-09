@@ -63,6 +63,19 @@ export class ProgressService {
     this.updateSummary();
   }
 
+  resetProcessingItems(): void {
+    const items = this.itemsSubject.getValue();
+    const updatedItems = items.map(item => {
+      if (item.status === 'processing') {
+        return { ...item, status: 'pending' as const };
+      }
+      return item;
+    });
+    
+    this.itemsSubject.next(updatedItems);
+    this.updateSummary();
+  }
+
   getFailedItems(): ProcessingItem[] {
     return this.itemsSubject.getValue().filter(item => item.status === 'failed');
   }

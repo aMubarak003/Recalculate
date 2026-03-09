@@ -89,10 +89,16 @@ export class QueueService {
   }
 
   private processItem(item: ProcessingItem): Observable<any> {
+    // If paused or stopped, skip this item (it will remain pending)
+    if (this.isPaused) {
+      return of(null);
+    }
+
     // Update status to processing
     this.progressService.updateItemStatus(item.id, 'processing');
 
     return this.apiService.updateMetricSnapshot(item.data).pipe(
+      takeUntil(this.stopSignal$),
       tap(() => {
         this.progressService.updateItemStatus(item.id, 'success');
       }),
@@ -106,8 +112,9 @@ export class QueueService {
 
   pause(): void {
     this.isPaused = true;
-    this.statusSubject.next('paused');
     this.stopSignal$.next();
+    this.progressService.resetProcessingItems();
+    this.statusSubject.next('paused');
   }
 
   resume(): void {
@@ -119,6 +126,7 @@ export class QueueService {
   stop(): void {
     this.isPaused = true;
     this.stopSignal$.next();
+    this.progressService.resetProcessingItems();
     this.statusSubject.next('idle');
   }
 
