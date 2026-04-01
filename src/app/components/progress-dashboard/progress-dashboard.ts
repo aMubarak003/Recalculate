@@ -91,11 +91,33 @@ items: ProcessingItem[] = [];
 
     const content = `Failed Items Report (Exhausted ${maxRetries} retries)\nGenerated: ${new Date().toISOString()}\n\nTotal Failed: ${exhaustedItems.length}\n\n${lines.join('\n')}`;
 
+    this.downloadFile(content, `failed-items-${new Date().toISOString().split('T')[0]}.txt`);
+  }
+
+  downloadNonSuccessItems(): void {
+    const nonSuccessItems = this.items.filter(item => item.status !== 'success');
+
+    if (nonSuccessItems.length === 0) {
+      alert('All items have succeeded.');
+      return;
+    }
+
+    const data = nonSuccessItems.map(item => ({
+      ScorecardNodeId: item.data.ScorecardNodeId,
+      CalendarPeriodId: item.data.CalendarPeriodId
+    }));
+
+    const content = JSON.stringify(data, null, 2);
+
+    this.downloadFile(content, `non-success-items-${new Date().toISOString().split('T')[0]}.txt`);
+  }
+
+  private downloadFile(content: string, filename: string): void {
     const blob = new Blob([content], { type: 'text/plain' });
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
     a.href = url;
-    a.download = `failed-items-${new Date().toISOString().split('T')[0]}.txt`;
+    a.download = filename;
     a.click();
     URL.revokeObjectURL(url);
   }

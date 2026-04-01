@@ -55,7 +55,8 @@ export class QueueService {
     for (let retry = 1; retry <= this.MAX_RETRIES; retry++) {
       const failedItems = this.progressService.getRetryableItems(this.MAX_RETRIES);
       
-      if (failedItems.length === 0 || this.isPaused || this.statusSubject.getValue() !== 'running') {
+      const currentStatus = this.statusSubject.getValue();
+      if (failedItems.length === 0 || this.isPaused || (currentStatus !== 'running' && currentStatus !== 'retrying')) {
         break;
       }
       

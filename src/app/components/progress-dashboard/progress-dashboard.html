@@ -30,6 +30,13 @@
     </div>
   </div>
 
+  <!-- Download Non-Success Items (visible when paused) -->
+  <div class="download-section" *ngIf="status === 'paused' && summary.total > 0 && summary.total !== summary.success">
+    <button class="btn btn-download" (click)="downloadNonSuccessItems()">
+      ⬇️ Download Non-Success Items ({{ summary.total - summary.success }})
+    </button>
+  </div>
+
   <!-- Progress Bar -->
   <div class="progress-bar-container" *ngIf="summary.total > 0">
     <div class="progress-bar">
