@@ -85,11 +85,12 @@ items: ProcessingItem[] = [];
       return;
     }
 
-    const lines = exhaustedItems.map(item => 
-      `Index: ${item.id + 1}, ScorecardNodeId: ${item.data.ScorecardNodeId}, CalendarPeriodId: ${item.data.CalendarPeriodId}, Retries: ${item.retryCount}, Error: ${item.error || 'Unknown'}`
-    );
+    const lines = exhaustedItems.map(item => ({
+      ScorecardNodeId: item.data.ScorecardNodeId,
+      CalendarPeriodId: item.data.CalendarPeriodId
+    }));
 
-    const content = `Failed Items Report (Exhausted ${maxRetries} retries)\nGenerated: ${new Date().toISOString()}\n\nTotal Failed: ${exhaustedItems.length}\n\n${lines.join('\n')}`;
+    const content = JSON.stringify(lines, null, 2);
 
     this.downloadFile(content, `failed-items-${new Date().toISOString().split('T')[0]}.txt`);
   }
